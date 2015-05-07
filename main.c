@@ -1,21 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <limits.h>
-
-#define DECODE_FUNC_PARAMS byte* rom, size_t romc
-
-typedef unsigned char byte;
-typedef int decode_function(byte*, size_t);
-
-
-int decode_invalid(DECODE_FUNC_PARAMS) {
-    fprintf(stderr, "invalid code!");
-    return EXIT_FAILURE;
-};
-
-int decode_00(DECODE_FUNC_PARAMS) {
-    return EXIT_SUCCESS;
-};
+#include "defs.h"
+#include "decode.h"
 
 int main() {
     int i;
