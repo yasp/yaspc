@@ -15,7 +15,7 @@ void build_decode_functions(decode_function** decode_functions, size_t decode_fu
 }
 
 void decode(byte* rom, size_t romc, decode_function** decode_functions) {
-    size_t i;
+    int i;
 
     for (i = 0; i < romc; ++i) {
         byte code = rom[i];
@@ -26,7 +26,7 @@ void decode(byte* rom, size_t romc, decode_function** decode_functions) {
             return;
         }
 
-        int rtn = func(rom, sizeof(rom));
+        int rtn = func(rom, sizeof(rom), &i);
 
         if(rtn == EXIT_FAILURE) {
             printf("unable to decode\n");
