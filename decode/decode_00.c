@@ -16,7 +16,7 @@ int decode_00(DECODE_FUNC_PARAMS) {
             uint8_t mask = p2;
             printf("enable %d\n", mask);
         } else {
-            return EXIT_FAILURE;
+            return false;
         }
     } else {
         uint8_t reg = p1 & (uint8_t)0b00011111;
@@ -25,7 +25,7 @@ int decode_00(DECODE_FUNC_PARAMS) {
 
         if(!read_byte_register(state, reg, &regval)) {
             fprintf(stderr, "could not read register b%d!", reg);
-            return EXIT_FAILURE;
+            return false;
         }
 
         switch (subcode) {
@@ -58,11 +58,11 @@ int decode_00(DECODE_FUNC_PARAMS) {
                 val = regval ^ val;
                 break;
             default:
-                return EXIT_FAILURE;
+                return false;
         }
 
         write_byte_register(state, reg, val);
     }
 
-    return EXIT_SUCCESS;
+    return true;
 };
