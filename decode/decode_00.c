@@ -1,12 +1,9 @@
-#include <stdlib.h>
-#include <stdio.h>
 #include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "decode.h"
-#include "stateutils.h"
-
-int decode_dummy(DECODE_FUNC_PARAMS) {
-    return EXIT_FAILURE;
-};
+#include "decode_00.h"
+#include "../stateutils.h"
 
 int decode_00(DECODE_FUNC_PARAMS) {
     uint8_t p1 = state->rom[++state->pc];

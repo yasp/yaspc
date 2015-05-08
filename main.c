@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "defs.h"
-#include "decode.h"
+#include "decode/decode.h"
 #include "state.h"
 
 
