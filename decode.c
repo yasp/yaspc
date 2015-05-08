@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdint.h>
 #include "decode.h"
 
 int decode_dummy(DECODE_FUNC_PARAMS) {
@@ -7,21 +8,21 @@ int decode_dummy(DECODE_FUNC_PARAMS) {
 };
 
 int decode_00(DECODE_FUNC_PARAMS) {
-    byte p1 = rom[++(*romp)];
-    byte p2 = rom[++(*romp)];
+    uint8_t p1 = state->rom[++state->pc];
+    uint8_t p2 = state->rom[++state->pc];
 
-    byte subcode = (p1 & (byte)0b11100000) >> 5;
+    uint8_t subcode = (p1 & (uint8_t)0b11100000) >> 5;
 
     if(subcode == 0b111) {
         if (p1 == 0b11100001) {
-            byte mask = p2;
+            uint8_t mask = p2;
             printf("enable %d\n", mask);
         } else {
             return EXIT_FAILURE;
         }
     } else {
-        byte reg = p1 & (byte)0b00011111;
-        byte val = p2;
+        uint8_t reg = p1 & (uint8_t)0b00011111;
+        uint8_t val = p2;
 
         switch (subcode) {
             case 0b000:
