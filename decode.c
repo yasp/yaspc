@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include "decode.h"
+#include "stateutils.h"
 
 int decode_dummy(DECODE_FUNC_PARAMS) {
     return EXIT_FAILURE;
@@ -22,33 +23,48 @@ int decode_00(DECODE_FUNC_PARAMS) {
         }
     } else {
         uint8_t reg = p1 & (uint8_t)0b00011111;
+        uint8_t regval;
         uint8_t val = p2;
+
+        if(!read_byte_register(state, reg, &regval)) {
+            fprintf(stderr, "could not read register b%d!", reg);
+            return EXIT_FAILURE;
+        }
 
         switch (subcode) {
             case 0b000:
                 printf("%d into b%d\n", val, reg);
+                write_byte_register(state, reg, val);
                 break;
             case 0b001:
                 printf("b%d+%d into b%d\n", reg, val, reg);
+                val = regval + val;
                 break;
             case 0b010:
                 printf("b%d-%d into b%d\n", reg, val, reg);
+                val = regval - val;
                 break;
             case 0b011:
                 printf("b%d=%d into b%d\n", reg, val, reg);
+                val = (uint8_t)((val > regval) - (val < regval));
                 break;
             case 0b100:
                 printf("b%d&%d into b%d\n", reg, val, reg);
+                val = regval & val;
                 break;
             case 0b101:
                 printf("b%d|%d into b%d\n", reg, val, reg);
+                val = regval | val;
                 break;
             case 0b110:
                 printf("b%d^%d into b%d\n", reg, val, reg);
+                val = regval ^ val;
                 break;
             default:
                 return EXIT_FAILURE;
         }
+
+        write_byte_register(state, reg, val);
     }
 
     return EXIT_SUCCESS;
