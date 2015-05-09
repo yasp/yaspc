@@ -28,7 +28,7 @@ void decode(struct EmuState* state, decode_function** decode_functions) {
 
         int rtn = func(state);
 
-        if(rtn == EXIT_FAILURE) {
+        if(!rtn) {
             printf("unable to decode\n");
             return;
         }
