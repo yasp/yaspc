@@ -13,6 +13,7 @@ void build_decode_functions(decode_function** decode_functions, size_t decode_fu
     }
 
     decode_functions[0x00] = (decode_function*)decode_00;
+    decode_functions[0x10] = (decode_function*)decode_10;
 }
 
 void decode(struct EmuState* state, decode_function** decode_functions) {

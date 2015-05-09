@@ -11,4 +11,7 @@ typedef int decode_function(struct EmuState*);
 
 int decode_dummy(DECODE_FUNC_PARAMS);
 
+#import "decode_00.h"
+#import "decode_10.h"
+
 #endif //YASP_DECODE_H
