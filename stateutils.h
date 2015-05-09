@@ -5,10 +5,13 @@
 #include <stdbool.h>
 #include "state.h"
 
-bool write_byte_register(struct EmuState* state, uint8_t number, uint8_t value);
-bool read_byte_register(struct EmuState* state, uint8_t number, uint8_t* rtn);
+bool is_byte_reg_num_valid(struct EmuState *state, uint8_t number);
+bool is_word_reg_num_valid(struct EmuState *state, uint8_t number);
 
-bool write_word_register(struct EmuState* state, uint8_t number, uint16_t value);
-bool read_word_register(struct EmuState* state, uint8_t number, uint16_t* val);
+void write_byte_register(struct EmuState* state, uint8_t number, uint8_t value);
+void read_byte_register(struct EmuState* state, uint8_t number, uint8_t* rtn);
+
+void write_word_register(struct EmuState* state, uint8_t number, uint16_t value);
+void read_word_register(struct EmuState* state, uint8_t number, uint16_t* val);
 
 #endif //YASP_STATEUTILS_H

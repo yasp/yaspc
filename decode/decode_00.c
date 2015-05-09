@@ -23,10 +23,12 @@ int decode_00(DECODE_FUNC_PARAMS) {
         uint8_t regval;
         uint8_t val = p2;
 
-        if(!read_byte_register(state, reg, &regval)) {
-            fprintf(stderr, "could not read register b%d!", reg);
+        if(!is_byte_reg_num_valid(state, reg)) {
+            fprintf(stderr, "invalid register b%d", reg);
             return false;
         }
+
+        read_byte_register(state, reg, &regval);
 
         switch (subcode) {
             case 0b000:
