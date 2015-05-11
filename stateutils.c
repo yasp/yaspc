@@ -30,6 +30,8 @@ bool init_state(struct EmuState* state) {
     }
 
     state->pc = 0;
+    state->stepping = false;
+    state->run = 0;
 
     return true;
 }

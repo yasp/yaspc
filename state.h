@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include "defs.h"
 
 struct EmuState {
@@ -12,7 +13,9 @@ struct EmuState {
     uint8_t* ram;
     size_t ramc;
 
-    int pc;
+    unsigned int pc;
+    bool stepping;
+    unsigned int run;
 };
 
 #endif //YASP_STATE_H

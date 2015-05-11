@@ -56,6 +56,14 @@ void print_word_registers(struct EmuState* state) {
 
 void decode(struct EmuState* state, decode_function** decode_functions) {
     for (; state->pc < state->romc; ++state->pc) {
+        if(state->stepping) {
+            if(state->run == 0) {
+                break;
+            }
+
+            state->run--;
+        }
+
         uint8_t code = state->rom[state->pc];
         decode_function* func = decode_functions[code];
 
@@ -91,6 +99,9 @@ int main(void) {
     size_t romc = sizeof(rom);
 
     set_rom(&state, rom, romc);
+
+    state.stepping = true;
+    state.run = 1;
 
     decode(&state, decode_functions);
 
