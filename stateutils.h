@@ -38,4 +38,9 @@ void read_word_register(struct EmuState* state, uint8_t number, uint16_t* rtn);
 
 #endif // DEBUG
 
+bool init_state(struct EmuState* state);
+
+bool set_ram(struct EmuState *state, uint8_t *ram, size_t ramc);
+bool set_rom(struct EmuState* state, uint8_t* rom, size_t romc);
+
 #endif //YASP_STATEUTILS_H
