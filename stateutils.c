@@ -4,59 +4,44 @@
 #include <stdio.h>
 #include "stateutils.h"
 
-__attribute__((always_inline))
+#ifdef DEBUG
 bool is_byte_reg_num_valid(struct EmuState *state, uint8_t number) {
     return (number < state->ramc);
 }
 
-__attribute__((always_inline))
 bool is_word_reg_num_valid(struct EmuState *state, uint8_t number) {
     return (number * 2 < state->ramc);
 }
 
-__attribute__((always_inline))
 void write_byte_register(struct EmuState* state, uint8_t number, uint8_t value) {
-    #ifdef DEBUG
     if(!is_byte_reg_num_valid(state, number)) {
         fprintf(stderr, "invalid register b%d", number);
     }
-    #endif
 
-    state->ram[number] = value;
+    _WRITE_BYTE_REGISTER(state, number, value)
 }
 
-__attribute__((always_inline))
 void read_byte_register(struct EmuState* state, uint8_t number, uint8_t* rtn) {
-    #ifdef DEBUG
     if(!is_byte_reg_num_valid(state, number)) {
         fprintf(stderr, "invalid register b%d", number);
     }
-    #endif
 
-    *rtn = state->ram[number];
+    _READ_BYTE_REGISTER(state, number, rtn)
 }
 
-__attribute__((always_inline))
 void write_word_register(struct EmuState* state, uint8_t number, uint16_t value) {
-    #ifdef DEBUG
     if(!is_word_reg_num_valid(state, number)) {
         fprintf(stderr, "invalid register w%d", number);
     }
-    #endif
 
-    state->ram[number + 1] = (uint8_t)(value & 0xFF);
-    state->ram[number + 0] = (uint8_t)((value >> 8) & 0xFF);
+    _WRITE_WORD_REGISTER(state, number, value)
 }
 
-__attribute__((always_inline))
-void read_word_register(struct EmuState* state, uint8_t number, uint16_t* val) {
-    #ifdef DEBUG
+void read_word_register(struct EmuState* state, uint8_t number, uint16_t* rtn) {
     if(!is_word_reg_num_valid(state, number)) {
         fprintf(stderr, "invalid register w%d", number);
     }
-    #endif
 
-    *val = 0;
-    *val |= state->ram[number + 1] & (uint8_t)0xFF;
-    *val |= (state->ram[number + 0] >> 8) & (uint8_t)0xFF;
+    _READ_WORD_REGISTER(state, number, rtn)
 }
+#endif
