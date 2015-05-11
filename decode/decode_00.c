@@ -33,7 +33,7 @@ int decode_00(DECODE_FUNC_PARAMS) {
         switch (subcode) {
             case 0b000:
                 printf("%d into b%d\n", val, reg);
-                write_byte_register(state, reg, val);
+                val = val;
                 break;
             case 0b001:
                 printf("b%d+%d into b%d\n", reg, val, reg);
