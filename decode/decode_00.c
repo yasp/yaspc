@@ -9,16 +9,10 @@ int decode_00(DECODE_FUNC_PARAMS) {
     uint8_t p1 = state->rom[++state->pc];
     uint8_t p2 = state->rom[++state->pc];
 
-    uint8_t subcode = (p1 & (uint8_t)0b11100000) >> 5;
-
-    if(subcode == 0b111) {
-        if (p1 == 0b11100001) {
-            uint8_t mask = p2;
-            printf("enable %d\n", mask);
-        } else {
-            return false;
-        }
+    if(p1 == 0b11100001) {
+        printf("enable %d\n", p2);
     } else {
+        uint8_t subcode = (p1 & (uint8_t)0b11100000) >> 5;
         uint8_t reg = p1 & (uint8_t)0b00011111;
         uint8_t regval;
         uint8_t val = p2;
