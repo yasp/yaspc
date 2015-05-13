@@ -5,6 +5,7 @@
 #include "decode/decode.h"
 #include "state.h"
 #include "stateutils.h"
+#include "controlsocket.h"
 
 
 void build_decode_functions(decode_function** decode_functions, size_t decode_functionsc) {
@@ -87,6 +88,27 @@ void decode(struct EmuState* state, decode_function** decode_functions) {
 }
 
 int main(void) {
+    struct socketinfo info;
+    int client;
+    packet_type type;
+    void* payload;
+
+    init_socket(&info, "/tmp/yasp");
+
+    if(!accept_client(&info, &client)) {
+        return EXIT_FAILURE;
+    }
+
+
+    read_from_client(client, &type, &payload);
+
+    switch (type) {
+        case TYPE_PACKET_LOAD:
+            break;
+        default:
+            return false;
+    }
+
     decode_function* decode_functions[0xFF];
     build_decode_functions(decode_functions, sizeof(decode_functions) / sizeof(void*));
 
