@@ -38,7 +38,7 @@ bool init_state(struct EmuState* state) {
 
 bool set_ram(struct EmuState* state, uint8_t* ram, size_t ramc) {
     if(ramc > state->ramc) {
-        fprintf(stderr, "ram is too big (max %d)\n", state->ramc);
+        fprintf(stderr, "ram is too big (max %zd)\n", state->ramc);
         return false;
     }
 
@@ -49,7 +49,7 @@ bool set_ram(struct EmuState* state, uint8_t* ram, size_t ramc) {
 
 bool set_rom(struct EmuState* state, uint8_t* rom, size_t romc) {
     if(romc > state->romc) {
-        fprintf(stderr, "rom is too big (max %d)\n", state->romc);
+        fprintf(stderr, "rom is too big (max %zd)\n", state->romc);
         return false;
     }
 

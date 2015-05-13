@@ -5,6 +5,8 @@
 #include "decode_00.h"
 #include "../stateutils.h"
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-variable"
 int decode_10(DECODE_FUNC_PARAMS) {
     uint8_t p1 = state->rom[++state->pc];
     uint8_t p2 = state->rom[++state->pc];
@@ -53,3 +55,4 @@ int decode_10(DECODE_FUNC_PARAMS) {
 
     return true;
 };
+#pragma GCC diagnostic pop
