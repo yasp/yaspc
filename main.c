@@ -7,6 +7,7 @@
 #include "stateutils.h"
 #include "controlsocket.h"
 
+decode_function* decode_functions[0xFF];
 
 void build_decode_functions(decode_function** decode_functions, size_t decode_functionsc) {
     size_t i;
@@ -55,7 +56,7 @@ void print_word_registers(struct EmuState* state) {
     printf("\n");
 }
 
-void decode(struct EmuState* state, decode_function** decode_functions) {
+void decode(struct EmuState* state) {
     for (; state->pc < state->romc; ++state->pc) {
         if(state->stepping) {
             if(state->run == 0) {
@@ -87,45 +88,61 @@ void decode(struct EmuState* state, decode_function** decode_functions) {
     }
 }
 
+void handle_packet_load(struct EmuState* state, struct payload_load* payload) {
+    set_rom(state, payload->romv, payload->romc);
+    decode(state);
+}
+
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+void handle_packet_run(struct EmuState* state, struct payload_run* payload) {
+    decode(state);
+}
+#pragma GCC diagnostic pop
+
+void handle_packet_step(struct EmuState* state, struct payload_step* payload) {
+    state->stepping = true;
+    state->run = payload->count;
+    decode(state);
+}
+
+void handle_packet(struct EmuState* state, packet_type type, void* payload) {
+    switch (type) {
+        case TYPE_PACKET_LOAD:
+            handle_packet_load(state, (struct payload_load*)payload);
+            break;
+        case TYPE_PACKET_RUN:
+            handle_packet_run(state, (struct payload_run*)payload);
+            break;
+        case TYPE_PACKET_STEP:
+            handle_packet_step(state, (struct payload_step*)payload);
+            break;
+        default:
+            exit(EXIT_FAILURE);
+    }
+}
+
 int main(void) {
+    struct EmuState state;
     struct socketinfo info;
     int client;
     packet_type type;
     void* payload;
 
+    build_decode_functions(decode_functions, sizeof(decode_functions) / sizeof(void*));
+
+    init_state(&state);
     init_socket(&info, "/tmp/yasp");
 
     if(!accept_client(&info, &client)) {
         return EXIT_FAILURE;
     }
 
-
-    read_from_client(client, &type, &payload);
-
-    switch (type) {
-        case TYPE_PACKET_LOAD:
-            break;
-        default:
-            return false;
+    while (true) {
+        read_from_client(client, &type, &payload);
+        handle_packet(&state, type, payload);
     }
-
-    decode_function* decode_functions[0xFF];
-    build_decode_functions(decode_functions, sizeof(decode_functions) / sizeof(void*));
-
-    struct EmuState state;
-    init_state(&state);
-
-    uint8_t rom[] = {
-            0x00, 0x01, 0x20, 0x00, 0x00, 0x00
-    };
-    size_t romc = sizeof(rom);
-
-    set_rom(&state, rom, romc);
-
-    state.stepping = true;
-    state.run = 1;
-
-    decode(&state, decode_functions);
 
     return EXIT_SUCCESS;
 }

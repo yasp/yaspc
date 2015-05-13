@@ -51,6 +51,17 @@ bool read_packet_part(int ns, size_t len, void** pak) {
     return true;
 }
 
+bool is_valid_type(packet_type type) {
+    switch (type) {
+        case TYPE_PACKET_LOAD:
+        case TYPE_PACKET_RUN:
+        case TYPE_PACKET_STEP:
+            return true;
+        default:
+            return false;
+    }
+}
+
 bool read_from_client(int ns, packet_type* type, void** payload) {
     struct packet* pak;
 
@@ -60,11 +71,16 @@ bool read_from_client(int ns, packet_type* type, void** payload) {
 
     *type = pak->type;
 
+    if(!is_valid_type(*type)) {
+        return false;
+    }
+
     if(!read_packet_part(ns, pak->len, payload)) {
         return false;
     }
 
-    free(&pak);
+    free(pak);
 
     return true;
 }
+
