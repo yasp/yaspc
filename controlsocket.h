@@ -3,6 +3,7 @@
 
 #include <sys/socket.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 struct socketinfo {
     int s;
