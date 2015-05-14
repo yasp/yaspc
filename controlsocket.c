@@ -111,6 +111,13 @@ bool read_payload_load(int ns, void** rtn) {
     return true;
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+bool read_payload_run(int ns, void** rtn) {
+    return true;
+}
+#pragma GCC diagnostic pop
+
 bool read_command(int ns, packet_type *type, void **payload) {
     uint32_t len;
 
@@ -132,6 +139,9 @@ bool read_command(int ns, packet_type *type, void **payload) {
     switch (*type) {
         case TYPE_PACKET_LOAD:
             read_payload_load(ns, payload);
+            break;
+        case TYPE_PACKET_RUN:
+            read_payload_run(ns, payload);
             break;
         default:
             printf("read_command: missing type handler\n");
