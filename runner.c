@@ -68,7 +68,7 @@ void emulate(struct EmuState *state) {
         decode_function* func = decode_functions[code];
 
         if(func == decode_dummy) {
-            fprintf(stderr, "invalid code %d!", code);
+            fprintf(stderr, "invalid code 0x%02x!\n", code);
             return;
         }
 
