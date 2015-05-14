@@ -90,9 +90,7 @@ void decode(struct EmuState* state) {
 
 void handle_packet_load(struct EmuState* state, struct payload_load* payload) {
     set_rom(state, payload->romv, payload->romc);
-    decode(state);
 }
-
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -107,15 +105,24 @@ void handle_packet_step(struct EmuState* state, struct payload_step* payload) {
     decode(state);
 }
 
+#ifdef DEBUG
+#define PRINT_PACKET_TYPE(type) printf("" #type "\n")
+#else
+#define PRINT_PACKET_TYPE(type) (void)0
+#endif
+
 void handle_packet(struct EmuState* state, packet_type type, void* payload) {
     switch (type) {
         case TYPE_PACKET_LOAD:
+            PRINT_PACKET_TYPE(LOAD);
             handle_packet_load(state, (struct payload_load*)payload);
             break;
         case TYPE_PACKET_RUN:
+            PRINT_PACKET_TYPE(RUN);
             handle_packet_run(state, (struct payload_run*)payload);
             break;
         case TYPE_PACKET_STEP:
+            PRINT_PACKET_TYPE(STEP);
             handle_packet_step(state, (struct payload_step*)payload);
             break;
         default:
@@ -140,7 +147,9 @@ int main(void) {
     }
 
     while (true) {
-        read_from_client(client, &type, &payload);
+        if(!read_command(client, &type, &payload)) {
+            return EXIT_FAILURE;
+        }
         handle_packet(&state, type, payload);
     }
 
