@@ -59,7 +59,7 @@ bool set_rom(struct EmuState* state, uint8_t* rom, size_t romc) {
 }
 
 
-#if DEBUG
+#ifdef DEBUG
 bool is_byte_reg_num_valid(struct EmuState *state, uint8_t number) {
     return (number < state->ramc);
 }

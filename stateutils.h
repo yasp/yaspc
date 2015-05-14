@@ -33,8 +33,8 @@ void read_word_register(struct EmuState* state, uint8_t number, uint16_t* rtn);
 #define write_byte_register _WRITE_BYTE_REGISTER
 #define read_byte_register _READ_BYTE_REGISTER
 
-#define write_word_register _WRITE_word_REGISTER
-#define read_word_register _READ_word_REGISTER
+#define write_word_register _WRITE_WORD_REGISTER
+#define read_word_register _READ_WORD_REGISTER
 
 #endif // DEBUG
 
