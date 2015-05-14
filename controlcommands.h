@@ -4,6 +4,6 @@
 #include "controlsocket.h"
 #include "state.h"
 
-void handle_packet(struct EmuState* state, packet_type type, void* payload);
+bool handle_packet(struct EmuState* state, packet_type type, void* payload);
 
 #endif //YASP_CONTROLCOMMANDS_H

@@ -28,7 +28,7 @@ void handle_packet_step(struct EmuState* state, struct payload_step* payload) {
 #define PRINT_PACKET_TYPE(type) (void)0
 #endif
 
-void handle_packet(struct EmuState* state, packet_type type, void* payload) {
+bool handle_packet(struct EmuState* state, packet_type type, void* payload) {
     switch (type) {
         case TYPE_PACKET_LOAD:
             PRINT_PACKET_TYPE(LOAD);
@@ -43,6 +43,8 @@ void handle_packet(struct EmuState* state, packet_type type, void* payload) {
             handle_packet_step(state, (struct payload_step*)payload);
             break;
         default:
-            exit(EXIT_FAILURE);
+            return false;
     }
+
+    return true;
 }

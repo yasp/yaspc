@@ -27,9 +27,14 @@ int main(void) {
 
     while (true) {
         if(!read_command(client, &type, &payload)) {
+            printf("invalid command %d", type);
             return EXIT_FAILURE;
         }
-        handle_packet(&state, type, payload);
+
+        if(!handle_packet(&state, type, payload)) {
+            printf("cannot handle command");
+            return EXIT_FAILURE;
+        }
     }
 
     return EXIT_SUCCESS;

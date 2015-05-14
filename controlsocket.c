@@ -115,14 +115,17 @@ bool read_command(int ns, packet_type *type, void **payload) {
     uint32_t len;
 
     if(!read_uint8(ns, type)) {
+        printf("read_command: cannot read type\n");
         return false;
     }
 
     if(!read_uint32(ns, &len)) {
+        printf("read_command: cannot read length\n");
         return false;
     }
 
     if(!is_valid_type(*type)) {
+        printf("read_command: unknown type\n");
         return false;
     }
 
@@ -131,6 +134,7 @@ bool read_command(int ns, packet_type *type, void **payload) {
             read_payload_load(ns, payload);
             break;
         default:
+            printf("read_command: missing type handler\n");
             return false;
     }
 
