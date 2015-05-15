@@ -19,12 +19,8 @@ struct payload_load {
     uint8_t* romv;
 };
 
-#define TYPE_PACKET_RUN 2
-struct payload_run {
-};
-
-#define TYPE_PACKET_STEP 3
-struct payload_step {
+#define TYPE_PACKET_CONTINUE 2
+struct payload_continue {
     uint16_t count;
 };
 

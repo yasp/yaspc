@@ -86,8 +86,7 @@ READ_THING(read_uint32, uint32_t)
 bool is_valid_type(packet_type type) {
     switch (type) {
         case TYPE_PACKET_LOAD:
-        case TYPE_PACKET_RUN:
-        case TYPE_PACKET_STEP:
+        case TYPE_PACKET_CONTINUE:
             return true;
         default:
             return false;
@@ -109,15 +108,8 @@ bool read_payload_load(int ns, void** rtn) {
     return true;
 }
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-bool read_payload_run(int ns, void** rtn) {
-    return true;
-}
-#pragma GCC diagnostic pop
-
-bool read_payload_step(int ns, void** rtn) {
-    struct payload_step* payload = malloc(sizeof(struct payload_step));
+bool read_payload_continue(int ns, void** rtn) {
+    struct payload_continue* payload = malloc(sizeof(struct payload_continue));
 
     if(!read_uint16(ns, &payload->count)) {
         return false;
@@ -150,11 +142,8 @@ bool read_command(int ns, packet_type *type, void **payload) {
         case TYPE_PACKET_LOAD:
             read_payload_load(ns, payload);
             break;
-        case TYPE_PACKET_RUN:
-            read_payload_run(ns, payload);
-            break;
-        case TYPE_PACKET_STEP:
-            read_payload_step(ns, payload);
+        case TYPE_PACKET_CONTINUE:
+            read_payload_continue(ns, payload);
             break;
         default:
             printf("read_command: missing type handler\n");

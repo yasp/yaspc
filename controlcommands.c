@@ -11,16 +11,10 @@ void handle_packet_load(struct EmuState* state, struct payload_load* payload) {
     free(payload);
 }
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-void handle_packet_run(struct EmuState* state, struct payload_run* payload) {
-    emulate(state);
-}
-#pragma GCC diagnostic pop
-
-void handle_packet_step(struct EmuState* state, struct payload_step* payload) {
+void handle_packet_continue(struct EmuState* state, struct payload_continue* payload) {
     state->stepping = true;
     state->run = payload->count;
+    state->stepping = (state->run != UINT16_MAX);
     emulate(state);
     free(payload);
 }
@@ -37,13 +31,9 @@ bool handle_packet(struct EmuState* state, packet_type type, void* payload) {
             PRINT_PACKET_TYPE(LOAD);
             handle_packet_load(state, (struct payload_load*)payload);
             break;
-        case TYPE_PACKET_RUN:
-            PRINT_PACKET_TYPE(RUN);
-            handle_packet_run(state, (struct payload_run*)payload);
-            break;
-        case TYPE_PACKET_STEP:
-            PRINT_PACKET_TYPE(STEP);
-            handle_packet_step(state, (struct payload_step*)payload);
+        case TYPE_PACKET_CONTINUE:
+            PRINT_PACKET_TYPE(CONTINUE);
+            handle_packet_continue(state, (struct payload_continue*)payload);
             break;
         default:
             return false;
