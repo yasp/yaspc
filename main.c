@@ -21,10 +21,12 @@ int main(void) {
     init_state(&state);
     init_socket(&info, "/tmp/yasp");
 
+    printf("waiting for a connection\n");
     if(!accept_client(&info, &client)) {
         return EXIT_FAILURE;
     }
 
+    printf("waiting for commands\n");
     while (true) {
         if(!read_command(client, &type, &payload)) {
             printf("invalid command %d", type);
