@@ -22,6 +22,7 @@ void handle_packet_step(struct EmuState* state, struct payload_step* payload) {
     state->stepping = true;
     state->run = payload->count;
     emulate(state);
+    free(payload);
 }
 
 #ifdef DEBUG

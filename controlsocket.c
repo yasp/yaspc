@@ -116,6 +116,18 @@ bool read_payload_run(int ns, void** rtn) {
 }
 #pragma GCC diagnostic pop
 
+bool read_payload_step(int ns, void** rtn) {
+    struct payload_step* payload = malloc(sizeof(struct payload_step));
+
+    if(!read_uint16(ns, &payload->count)) {
+        return false;
+    }
+
+    *rtn = payload;
+
+    return true;
+}
+
 bool read_command(int ns, packet_type *type, void **payload) {
     uint32_t len;
 
@@ -140,6 +152,9 @@ bool read_command(int ns, packet_type *type, void **payload) {
             break;
         case TYPE_PACKET_RUN:
             read_payload_run(ns, payload);
+            break;
+        case TYPE_PACKET_STEP:
+            read_payload_step(ns, payload);
             break;
         default:
             printf("read_command: missing type handler\n");
