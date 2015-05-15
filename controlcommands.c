@@ -23,7 +23,7 @@ void handle_packet_step(struct EmuState* state, struct payload_step* payload) {
 }
 
 #ifdef DEBUG
-#define PRINT_PACKET_TYPE(type) printf("" #type "\n")
+#define PRINT_PACKET_TYPE(type) printf("command: " #type "\n")
 #else
 #define PRINT_PACKET_TYPE(type) (void)0
 #endif
