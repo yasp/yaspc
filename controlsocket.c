@@ -39,21 +39,18 @@ bool accept_client(struct socketinfo* info, int* ns) {
     return true;
 }
 
-bool read_array(int ns, size_t len, void** rtn) {
-    void* recvbuf = malloc(len);
-    ssize_t recvlen = recv(ns, recvbuf, len, MSG_WAITALL);
+bool read_array(int ns, size_t len, uint8_t* rtn) {
+    ssize_t recvlen = recv(ns, rtn, len, MSG_WAITALL);
 
     if(recvlen <= 0) {
         return false;
     }
 
-    *rtn = recvbuf;
-
     #ifdef DEBUG
     printf("READ: array[%zd] => (", len);
     unsigned int i;
     for (i=0;i < len;i++) {
-        printf("%02x, ", ((uint8_t*)recvbuf)[i]);
+        printf("%02x, ", ((uint8_t*)rtn)[i]);
         fflush(stdout);
     }
     printf(")\n");
@@ -104,7 +101,8 @@ bool read_payload_load(int ns, void** rtn) {
         return false;
     }
 
-    read_array(ns, payload->romc, (void*)&payload->romv);
+    payload->romv = malloc(payload->romc);
+    read_array(ns, payload->romc, payload->romv);
 
     *rtn = payload;
 

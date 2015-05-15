@@ -7,6 +7,8 @@
 
 void handle_packet_load(struct EmuState* state, struct payload_load* payload) {
     set_rom(state, payload->romv, payload->romc);
+    free(payload->romv);
+    free(payload);
 }
 
 #pragma GCC diagnostic push

@@ -16,7 +16,7 @@ typedef uint8_t packet_type;
 #define TYPE_PACKET_LOAD 1
 struct payload_load {
     uint32_t romc;
-    uint8_t romv[];
+    uint8_t* romv;
 };
 
 #define TYPE_PACKET_RUN 2
