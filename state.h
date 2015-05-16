@@ -8,10 +8,10 @@
 
 struct EmuState {
     uint8_t* rom;
-    size_t romc;
+    uint32_t romc;
 
     uint8_t* ram;
-    size_t ramc;
+    uint32_t ramc;
 
     unsigned int pc;
     bool stepping;
