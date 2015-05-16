@@ -24,8 +24,19 @@ struct payload_continue {
     uint16_t count;
 };
 
+#define TYPE_PACKET_GET_STATE 3
+
 void init_socket(struct socketinfo* info, char* address);
 bool accept_client(struct socketinfo* info, int* ns);
 bool read_command(int ns, packet_type *type, void **payload);
+
+struct response_get_state {
+    uint32_t romc;
+    uint8_t* romv;
+    uint32_t ramc;
+    uint8_t* ramv;
+};
+
+void send_response_set_state(int client, struct response_get_state* response);
 
 #endif //YASP_CONTROLSOCKET_H

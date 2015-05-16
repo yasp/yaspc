@@ -33,7 +33,7 @@ int main(void) {
             return EXIT_FAILURE;
         }
 
-        if(!handle_packet(&state, type, payload)) {
+        if(!handle_packet(&state, client, type, payload)) {
             printf("cannot handle command");
             return EXIT_FAILURE;
         }

@@ -130,6 +130,9 @@ bool read_command(int ns, packet_type *type, void **payload) {
         case TYPE_PACKET_CONTINUE:
             read_payload_continue(ns, payload);
             break;
+        case TYPE_PACKET_GET_STATE:
+            // no payload
+            break;
         default:
             printf("read_command: unknown type\n");
             return false;
@@ -138,3 +141,34 @@ bool read_command(int ns, packet_type *type, void **payload) {
     return true;
 }
 
+
+#ifdef DEBUG
+#define WRITE_THING_DEBUG(type, val) printf("WRITE: " #type " => %d\n", val)
+#else
+#define WRITE_THING_DEBUG(type, val) (void)0
+#endif
+
+#define WRITE_THING(name, type) \
+    void name(int client, type val) { \
+        send(client, &val, sizeof(val), 0); \
+        WRITE_THING_DEBUG(type, val); \
+    }
+
+WRITE_THING(write_uint8, uint8_t)
+WRITE_THING(write_uint16, uint16_t)
+WRITE_THING(write_uint32, uint32_t)
+
+void send_array(int client, uint32_t c, void* v) {
+    #ifdef DEBUG
+    printf("WRITE: array[%u]\n", c);
+    #endif
+    send(client, &c, sizeof(c), 0);
+    send(client, v, c, 0);
+}
+
+void send_response_set_state(int client, struct response_get_state* resp) {
+    uint32_t len = (uint32_t)sizeof(uint32_t) * 2 + resp->romc + resp->ramc;
+    write_uint32(client, len);
+    send_array(client, resp->romc, resp->romv);
+    send_array(client, resp->ramc, resp->ramv);
+}
