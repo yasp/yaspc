@@ -18,42 +18,6 @@ void build_decode_functions() {
     decode_functions[0x10] = (decode_function*)decode_10;
 }
 
-void print_state(struct EmuState* state) {
-    printf("pc = %d\n", state->pc);
-}
-
-void print_byte_registers(struct EmuState* state) {
-    uint8_t i;
-    uint8_t val;
-
-    for(i = 0; i < N_BYTE_REGISTERS; i++) {
-        if(i % 3 == 0 && i != 0) {
-            printf("\n");
-        }
-
-        read_byte_register(state, i, &val);
-        printf("b%02d = 0x%02x ", i, val);
-    }
-
-    printf("\n");
-}
-
-void print_word_registers(struct EmuState* state) {
-    uint8_t i;
-    uint16_t val;
-
-    for(i = 0; i < N_WORD_REGISTERS; i++) {
-        if(i % 3 == 0 && i != 0) {
-            printf("\n");
-        }
-
-        read_word_register(state, i, &val);
-        printf("w%02d = 0x%02x ", i, val);
-    }
-
-    printf("\n");
-}
-
 void emulate(struct EmuState *state) {
     for (; state->pc < state->romc; ++state->pc) {
         if(state->stepping) {
@@ -78,10 +42,5 @@ void emulate(struct EmuState *state) {
             printf("unable to decode\n");
             return;
         }
-
-        print_state(state);
-        print_byte_registers(state);
-        print_word_registers(state);
-        printf("=========\n");
     }
 }
