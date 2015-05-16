@@ -24,8 +24,6 @@ struct payload_continue {
     uint16_t count;
 };
 
-bool is_valid_type(packet_type type);
-
 void init_socket(struct socketinfo* info, char* address);
 bool accept_client(struct socketinfo* info, int* ns);
 bool read_command(int ns, packet_type *type, void **payload);

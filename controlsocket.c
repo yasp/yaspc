@@ -83,16 +83,6 @@ READ_THING(read_uint8, uint8_t)
 READ_THING(read_uint16, uint16_t)
 READ_THING(read_uint32, uint32_t)
 
-bool is_valid_type(packet_type type) {
-    switch (type) {
-        case TYPE_PACKET_LOAD:
-        case TYPE_PACKET_CONTINUE:
-            return true;
-        default:
-            return false;
-    }
-}
-
 bool read_payload_load(int ns, void** rtn) {
     struct payload_load* payload = malloc(sizeof(struct payload_load));
 
@@ -133,11 +123,6 @@ bool read_command(int ns, packet_type *type, void **payload) {
         return false;
     }
 
-    if(!is_valid_type(*type)) {
-        printf("read_command: unknown type\n");
-        return false;
-    }
-
     switch (*type) {
         case TYPE_PACKET_LOAD:
             read_payload_load(ns, payload);
@@ -146,7 +131,7 @@ bool read_command(int ns, packet_type *type, void **payload) {
             read_payload_continue(ns, payload);
             break;
         default:
-            printf("read_command: missing type handler\n");
+            printf("read_command: unknown type\n");
             return false;
     }
 
