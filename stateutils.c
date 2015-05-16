@@ -12,14 +12,14 @@ bool init_state(struct EmuState* state) {
         return false;
     }
 
-    state->romc = RAM_SIZE;
+    state->ramc = RAM_SIZE;
 
-    if (state->romc < N_BYTE_REGISTERS) {
+    if (state->ramc < N_BYTE_REGISTERS) {
         fprintf(stderr, "ram is not big enought to hold %d byte registers\n", N_BYTE_REGISTERS);
         return false;
     }
 
-    if (state->romc < N_WORD_REGISTERS * 2) {
+    if (state->ramc < N_WORD_REGISTERS * 2) {
         fprintf(stderr, "ram is not big enought to hold %d word registers\n", N_WORD_REGISTERS);
         return false;
     }
